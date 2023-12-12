@@ -7,7 +7,7 @@ from torch_geometric.graphgym.register import register_edge_encoder
 class LinearEdgeEncoder(torch.nn.Module):
     def __init__(self, emb_dim):
         super().__init__()
-        if cfg.dataset.name in ['MNIST', 'CIFAR10']:
+        if cfg.dataset.name in ['MNIST', 'CIFAR10','HCPGender']:
             self.in_dim = 1
         elif cfg.dataset.name.startswith('attributed_triangle-'):
             self.in_dim = 2

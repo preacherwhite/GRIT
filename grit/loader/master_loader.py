@@ -10,7 +10,7 @@ import torch_geometric.transforms as T
 from numpy.random import default_rng
 from ogb.graphproppred import PygGraphPropPredDataset
 from torch_geometric.datasets import (GNNBenchmarkDataset, Planetoid, TUDataset,
-                                      WikipediaNetwork, ZINC)
+                                      WikipediaNetwork, ZINC,NeuroGraphDataset)
 from torch_geometric.graphgym.config import cfg
 from torch_geometric.graphgym.loader import load_pyg, load_ogb, set_dataset_attr
 from torch_geometric.graphgym.register import register_loader
@@ -26,6 +26,10 @@ from grit.transform.transforms import (pre_transform_in_memory,
                                        typecast_x, concat_x_and_pos,
                                        clip_graphs_to_size)
 
+
+def pre_transform_NeuroGraphDataset_one(data):
+    data.edge_attr = torch.Tensor(np.ones_like(data.edge_index[0, :]))
+    return data
 
 def log_loaded_dataset(dataset, format, name):
     logging.info(f"[*] Loaded dataset '{name}' from '{format}':")
@@ -247,8 +251,10 @@ def add_pe_transform_to_dataset(format, name, dataset_dir, pe_transform=None):
     if format.startswith('PyG-'):
         pyg_dataset_id = format.split('-', 1)[1]
         dataset_dir = osp.join(dataset_dir, pyg_dataset_id)
+        if pyg_dataset_id == 'NeuroGraphDataset':
+            dataset = NeuroGraphDataset(dataset_dir, name, transform=pre_transform_NeuroGraphDataset_one)
 
-        if pyg_dataset_id == 'GNNBenchmarkDataset':
+        elif pyg_dataset_id == 'GNNBenchmarkDataset':
             dataset = preformat_GNNBenchmarkDataset(dataset_dir, name)
 
         elif pyg_dataset_id == 'MalNetTiny':
