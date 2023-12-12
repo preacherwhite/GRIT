@@ -2,6 +2,7 @@ out_dir: results
 metric_best: accuracy
 tensorboard_each_run: True  # Log to Tensorboard each run
 accelerator: "cuda:0"
+num_workers: 10
 mlflow:
   use: False
   project: Exp
@@ -40,7 +41,7 @@ model:
   graph_pooling: mean
 gt:  # Hyperparameters optimized for ~100k budget.
   layer_type: GritTransformer
-  layers: 10
+  layers: 3
   n_heads: 4
   dim_hidden: 52  # `gt.dim_hidden` must match `gnn.dim_inner`
   dropout: 0.0
