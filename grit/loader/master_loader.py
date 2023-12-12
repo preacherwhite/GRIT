@@ -104,8 +104,9 @@ def load_dataset_master(format, name, dataset_dir):
     if format.startswith('PyG-'):
         pyg_dataset_id = format.split('-', 1)[1]
         dataset_dir = osp.join(dataset_dir, pyg_dataset_id)
-
-        if pyg_dataset_id == 'GNNBenchmarkDataset':
+        if pyg_dataset_id == 'NeuroGraphDataset':
+            dataset = NeuroGraphDataset(dataset_dir, name, transform=pre_transform_NeuroGraphDataset_one)
+        elif pyg_dataset_id == 'GNNBenchmarkDataset':
             dataset = preformat_GNNBenchmarkDataset(dataset_dir, name)
 
         elif pyg_dataset_id == 'MalNetTiny':
